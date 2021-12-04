@@ -1,5 +1,5 @@
 # watcher
-Watcher is a study project on python+django
+Watcher is a study project on python+django \
 Simple monitoring/health-checking tool
 
 ## Installation
@@ -12,7 +12,7 @@ Simple monitoring/health-checking tool
 7. Data will be displayed on the web interface
 
 ## Status
-This is a prototype of a future pet-project
+This is a prototype of a future pet-project \
 Nearest To-Do:
 1. Boundary values and "no data"-exceptions
 2. Move "executive" code from views to separate classes
