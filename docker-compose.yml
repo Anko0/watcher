@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  db1:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=******** # change it!
+      - POSTGRES_DB=postgres
+    volumes:
+      - ../postgres-watcher:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+  web:
+    restart: always
+    build: .
+    command: 'python /var/www/watcher/watcher/manage.py runserver 0.0.0.0:8090'
+    volumes:
+      - .:/var/www/watcher
+    ports:
+      - 8090:8090
+    depends_on:
+      - db1

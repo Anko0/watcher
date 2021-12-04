@@ -1,0 +1,13 @@
+/* 
+ACTIVE_TOKEN - change token to current active token (generated on active creating)
+AUTH_TOKEN - change token to current auth token (soon...)
+API_URL - change url to current server's api url (by default change ip only)
+TIME_DELAY - data collection frequency in seconds
+*/
+
+{
+    "ACTIVE_TOKEN": "ffe539f4-045a-432d-a0ae-ed9986adf72b",
+    "AUTH_TOKEN": 1,
+    "API_URL": "http://172.22.16.79:8090/metrix/",
+    "TIME_DELAY": 15
+}

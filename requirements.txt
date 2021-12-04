@@ -1,0 +1,4 @@
+Django==3.1
+psycopg2>=2.7,<2.9
+django-bootstrap4
+djangorestframework==3.12.4

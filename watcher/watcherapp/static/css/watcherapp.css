@@ -1,0 +1,43 @@
+div.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+div.header {
+    background-color: burlywood;
+    height: fit-content;
+}
+.active_name {
+    font-size: 50px;
+}
+.active_data {
+    font-size: 25px;
+}
+div.graf {
+    width: 500px;
+    height: 400px;
+}
+div.graf1 {
+    width: 500px;
+}
+div.active {
+    width: 380px;
+    height: fit-content;
+}
+a.not_link {
+text-decoration: none;
+}
+a:link {
+    color: #003b00;
+}
+a:visited {
+    color: #003b00;
+}
+a:hover {
+    color: #003b00;
+}
+a:active {
+    color: #003b00;
+}
+.tr_color {
+    background: rgb(152, 207, 152); 
+}

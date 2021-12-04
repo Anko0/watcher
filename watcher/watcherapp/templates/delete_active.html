@@ -1,0 +1,10 @@
+<html>
+    delete active
+    <br><br>
+    Are you sure?<br>
+    <form action="" method="post">
+        {% csrf_token %}
+        <button>Delete</button>
+    </form>
+    <a href="{% url 'show_actives' %}"><button> Cancel </button></a>
+</html>

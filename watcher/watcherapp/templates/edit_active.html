@@ -1,0 +1,9 @@
+<html>
+    edit active
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+    </form>
+    <a href="{% url 'show_actives' %}"><button> Cancel </button></a>
+</html>
