@@ -1,14 +1,118 @@
-<html>
-    <head>
-        <title>
-            Main page
-        </title>
-    </head>
-    <body>
-        Nothing...<br>
-        Test page
-        <br><br><br>
-        add active <a href="{% url 'add_active' %}" >add active</a><br>
-        show actives <a href="{% url 'show_actives' %}" >show actives</a><br>
-    </body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Watcher - Main{% endblock %}
+{% block content %}
+{% load static %}
+{% load perm_extras %}
+
+
+    <div class="header container-fluid">
+        <table class="table table-borderless table-sm header_h">
+            <tbody>
+                <tr>
+                    <td class="active_name align-middle">
+                        Watcher
+                    </td>
+                    <td class="align-middle active_data">
+                        Monitor your resources
+                    </td>
+                    {% if user.is_authenticated %}
+                    <td class="active_data align-middle logout">
+                        <a href="/accounts/logout/"><button type="button" class="btn btn-outline-dark btn-lg">LOGOUT</button></a>
+                    </td>
+                    {% else %}
+                    <td class="active_data align-middle logout">
+                        <a href="/accounts/login/"><button type="button" class="btn btn-outline-dark btn-lg">LOGIN</button></a>
+                    </td>
+                    {% endif %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container2">
+        {% if user.is_authenticated %}
+            <div class="container-fluid">
+                {% if request.user|in_group:"administrators" %}
+                    <div class="row row-cols-3">
+                        <div class="col">
+                            <div class="card border-dark h-100">
+                                <div class="card-header">
+                                    <h5>Show actives</h5>
+                                </div>
+                                <div class="card-body text-dark">
+                                    <p class="card-text">Monitor your actives: metrics, statuses, processes and other</p>
+                                </div>
+                                <div class="card-footer"><a href="{% url 'show_actives' %}" class="btn btn-success whiter">Go</a></div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card border-dark h-100">
+                                <div class="card-header">
+                                    <h5>Add active</h5>
+                                </div>
+                                <div class="card-body text-dark">
+                                    <p class="card-text">Register new infrastructure actives and monitor them</p>
+                                </div>
+                                <div class="card-footer"><a href="{% url 'add_active' %}" class="btn btn-success whiter">Go</a></div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card border-dark h-100">
+                                <div class="card-header">
+                                    <h5>Manage emails</h5>
+                                </div>
+                                <div class="card-body text-dark">
+                                    <p class="card-text">Manage alerting system: add or delete email addresses for alerting</p>
+                                </div>
+                                <div class="card-footer"><a href="{% url 'show_emails' %}" class="btn btn-success whiter">Go</a></div>
+                            </div>
+                        </div>
+                    </div>
+                {% elif request.user|in_group:"managers" %}
+                    <div class="row row-cols-3">
+                        <div class="col">
+                            <div class="card border-dark h-100">
+                                <div class="card-header">
+                                    <h5>Show actives</h5>
+                                </div>
+                                <div class="card-body text-dark">
+                                    <p class="card-text">Monitor your actives: metrics, statuses, processes and other</p>
+                                </div>
+                                <div class="card-footer"><a href="{% url 'show_actives' %}" class="btn btn-success whiter">Go</a></div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card border-dark h-100">
+                                <div class="card-header">
+                                    <h5>Add active</h5>
+                                </div>
+                                <div class="card-body text-dark">
+                                    <p class="card-text">Register new infrastructure actives and monitor them</p>
+                                </div>
+                                <div class="card-footer">Contact your administrator</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card border-dark h-100">
+                                <div class="card-header">
+                                    <h5>Manage emails</h5>
+                                </div>
+                                <div class="card-body text-dark">
+                                    <p class="card-text">Manage alerting system: add or delete email addresses for alerting</p>
+                                </div>
+                                <div class="card-footer">Contact your administrator</div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    You have no permissions. Contact your administrator
+                {% endif %}
+            </div>
+        {% else %}
+            You are not authenticated and have no permissions on this site<br>
+            Please, login <a href="{% url 'login' %}" ><em>here</em></a> or contact your administrator
+        {% endif %}
+    </div>
+
+{% endblock %}

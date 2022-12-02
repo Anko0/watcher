@@ -1,37 +1,48 @@
 {% extends 'base.html' %}
 
 {% block title %}Watcher - Active details{% endblock %}
+{% load static %}
 {% block content %}
 
-    <body>
-        <div class="header container-fluid">
-            <table class="table table-borderless table-sm" style="height: 100%;">
-                <tbody>
-                    <tr>
-                        <td class="active_name align-middle">
-                            {{ metric_list_render.active_name }}
-                        </td>
-                        <td class="align-middle active_data">
-                            {{ metric_list_render.active_token }}
-                        </td>
-                        <td class="active_data align-middle">
-                            {{ metric_list_render.last_metrix_created }}
-                        </td>
-                        <td class="active_data align-middle">
-                            <a href="{% url 'edit_active' pk=metric_list_render.pk %}"><button type="button" class="btn btn-light">EDIT</button></a>
-                        </td>
-                        <td class="active_data align-middle">
-                            <a href="{% url 'delete_active' pk=metric_list_render.pk %}"><button type="button" class="btn btn-light">DELETE</button></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <br>
-        <table class="table table-borderless table-sm align-middle fit-content" style="width:auto">
+
+    <div class="header container-fluid">
+        <table class="table table-borderless table-sm header_h">
+            <tbody>
+                <tr>
+                    <td class="active_name align-middle">
+                        <a href="{% url 'show_actives' %}" ><i class="bi bi-arrow-left-square-fill"></i></a>
+                    </td>
+                    <td class="active_name align-middle">
+                        {{ metric_list_render.active_name }}
+                    </td>
+                    <td class="align-middle active_data">
+                        {{ metric_list_render.active_token }}
+                    </td>
+                    <td class="active_data align-middle">
+                        {{ metric_list_render.last_metrix_created }}
+                    </td>
+                    <td class="active_data align-middle">
+                        <button type="button" class="btn btn-outline-dark btn-lg" id="autorefresh_button" onclick="refresher()">Refresh ON</button>
+                    </td>
+                    <td class="active_data align-middle">
+                        <a href="{% url 'edit_active' pk=metric_list_render.pk %}"><button type="button" class="btn btn-outline-dark btn-lg">EDIT</button></a>
+                    </td>
+                    <td class="active_data align-middle">
+                        <a href="{% url 'delete_active' pk=metric_list_render.pk %}"><button type="button" class="btn btn-outline-dark btn-lg">DELETE</button></a>
+                    </td>
+                    <td class="active_data align-middle logout">
+                        <a href="/accounts/logout/"><button type="button" class="btn btn-outline-dark btn-lg">LOGOUT</button></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="container2">
+        <table class="table table-borderless table-sm align-middle fit-content table_w">
             <tr>
                 <td>
-                    <b>Hostname:</b>
+                    <strong>Hostname:</strong>
                 </td>
                 <td>
                     {{ metric_list_render.active_hostname }}
@@ -39,7 +50,7 @@
             </tr>
             <tr>
                 <td>
-                    <b>Address:</b>
+                    <strong>Address:</strong>
                 </td>
                 <td>
                     {{ metric_list_render.active_ip }}
@@ -47,7 +58,7 @@
             </tr>
             <tr>
                 <td>
-                    <b>OS:</b>
+                    <strong>OS:</strong>
                 </td>
                 <td>
                     {{ metric_list_render.active_os.0 }}
@@ -55,366 +66,384 @@
             </tr>
             <tr>
                 <td>
-                    <b>Kernel:</b>
+                    <strong>Kernel:</strong>
                 </td>
                 <td>
                     {{ metric_list_render.active_kernel.0 }}
                 </td>
             </tr>
         </table>
-
-        <br><br><br>
-        
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-xl-4 col-lg-6 col-md-10 col-sm-12" >
-                        <div class="graf " >
-                            <canvas id="notmyChart1" width="450" height="350" ></canvas>
-                            <script>
-                                const ctx1 = document.getElementById('notmyChart1');
-                                const notmyChart1 = new Chart(ctx1, {
-                                    type: 'line',
-                                    data: {
-                                        labels: {{metric_list_render.metrix_date_5|safe}},
-                                        datasets: [{
-                                            label: 'CPU AVG',
-                                            data: {{metric_list_render.metrix_cpu_5}},
-                                            fill: true,
-                                            backgroundColor: [
-                                                'rgba(210, 105, 30, 0.2)'
-                                            ],
-                                            borderColor: [
-                                                'rgba(210, 105, 30, 1)'
-                                            ],
-                                            borderWidth: 1
-                                        }]
-                                    },
-                                    options: {
-                                        responsive: false,
-                                        scales: {
-                                            y: {
-                                                beginAtZero: true,
-                                                min: 0,
-                                                max: 100,
-                                                ticks: {
-                                                    stepSize: 20
-                                                }
+    </div>
+    <br>
+    <div class="container2">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-4 col-lg-6 col-md-10 col-sm-12" >
+                    <div class="graf">
+                        <canvas id="notmyChart1" width="450" height="350" ></canvas>
+                        <script>
+                            const ctx1 = document.getElementById('notmyChart1');
+                            const notmyChart1 = new Chart(ctx1, {
+                                type: 'line',
+                                data: {
+                                    labels: {{metric_list_render.metrix_date_5|safe}},
+                                    datasets: [{
+                                        label: 'CPU AVG',
+                                        data: {{metric_list_render.metrix_cpu_5}},
+                                        fill: true,
+                                        backgroundColor: [
+                                            'rgba(210, 105, 30, 0.2)'
+                                        ],
+                                        borderColor: [
+                                            'rgba(210, 105, 30, 1)'
+                                        ],
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    responsive: false,
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            min: 0,
+                                            max: 100,
+                                            ticks: {
+                                                stepSize: 20
                                             }
-                                        }
-                                    },
-                                });
-                            </script>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-6 col-md-10 col-sm-12" >
-                        <div class="graf " >
-                            <canvas id="notmyChart2" width="450" height="350" ></canvas>
-                            <script>
-                                const ctx2 = document.getElementById('notmyChart2');
-                                const notmyChart2 = new Chart(ctx2, {
-                                    type: 'line',
-                                    data: {
-                                        labels: {{metric_list_render.metrix_date_5|safe}},
-                                        datasets: [{
-                                            label: 'RAM',
-                                            data: {{metric_list_render.metrix_ram_5}},
-                                            fill: true,
-                                            backgroundColor: [
-                                                'rgba(34, 139, 34, 0.2)'
-                                            ],
-                                            borderColor: [
-                                                'rgba(34, 139, 34, 1)'
-                                            ],
-                                            borderWidth: 1
-                                        }]
-                                    },
-                                    options: {
-                                        responsive: false,
-                                        scales: {
-                                            y: {
-                                                beginAtZero: true,
-                                                min: 0,
-                                                max: 100,
-                                                ticks: {
-                                                    stepSize: 20
-                                                }
-                                            }
-                                        }
-                                    },
-                                });
-                            </script>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-6 col-md-10 col-sm-12" >
-                        <div class="graf " >
-                            <canvas id="notmyChart3" width="450" height="350" ></canvas>
-                            <script>
-                                const ctx3 = document.getElementById('notmyChart3');
-                                const notmyChart3 = new Chart(ctx3, {
-                                    type: 'line',
-                                    data: {
-                                        labels: {{metric_list_render.metrix_date_5|safe}},
-                                        datasets: [{
-                                            label: 'SWAP',
-                                            data: {{metric_list_render.metrix_swap_5}},
-                                            fill: true,
-                                            backgroundColor: [
-                                                'rgba(65, 105, 225, 0.2)'
-                                            ],
-                                            borderColor: [
-                                                'rgba(65, 105, 225, 1)'
-                                            ],
-                                            borderWidth: 1
-                                        }]
-                                    },
-                                    options: {
-                                        responsive: false,
-                                        scales: {
-                                            y: {
-                                                beginAtZero: true,
-                                                min: 0,
-                                                max: 100,
-                                                ticks: {
-                                                    stepSize: 20
-                                                }
-                                            }
-                                        }
-                                    },
-                                });
-                            </script>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-xl-4 col-lg-6 col-md-10 col-sm-12" >
-                        <div class="graf1">
-                            <canvas id="notmyChart4" width="450" height="350" ></canvas>
-                            <script>
-                                const ctx4 = document.getElementById('notmyChart4');
-                                const notmyChart4 = new Chart(ctx4, {
-                                    type: 'bar',
-                                    data: {
-                                        labels: {{metric_list_render.metrix_rom_names|safe}},
-                                        datasets: [{
-                                            axis: 'y',
-                                            label: 'Disk usage',
-                                            data: {{metric_list_render.metrix_rom_percents}},
-                                            fill: false,
-                                            backgroundColor: [
-                                                'rgba(153, 50, 204, 0.2)'
-                                            ],
-                                            borderColor: [
-                                                'rgb(153, 50, 204, 1)'
-                                            ],
-                                            borderWidth: 1
-                                        }]
-                                    },
-                                    options: {
-                                        responsive: false,
-                                        indexAxis: 'y',
-                                        scales: {
-                                            x: {
-                                                beginAtZero: true,
-                                                min: 0,
-                                                max: 100,
-                                                ticks: {
-                                                    stepSize: 20
-                                                }
-                                            }
-                                        }
-                                    },
-                                });
-                            </script>
-                        </div>
-                    </div>
-                    
-                    
-                    <div class="col-xl-4 col-lg-6 col-md-10 col-sm-12" >
-                        <div style="font-size: 12px;"  class="graf1">
-                            <table  class="table table-bordered table-sm align-middle"  style="width: 300px;">
-                                <tr>
-                                    <th style="word-wrap: break-word;">
-                                        Username
-                                    </th>
-                                    <th style="word-wrap: break-word;">
-                                        PID
-                                    </th>
-                                    <th style="word-wrap: break-word;">
-                                        Process
-                                    </th>
-                                </tr>
-                                {% for pid, data in metric_list_render.metrix_users_collector.items %}
-                                    <tr>
-                                        <td style="word-wrap: break-word;">
-                                            {{ data.0 }}
-                                        </td>
-                                        <td  style="word-wrap: break-word;">
-                                            {{ pid }}
-                                        </td>
-                                        <td style="word-wrap: break-word;">
-                                            {{ data.1 }}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </table>
-                        </div>
-                    </div>
-                    
-                    <div class="col-xl-4 col-lg-6 col-md-10 col-sm-12" >
-                        <div style="font-size: 12px;"  class="graf1">
-                            <table  class="table table-bordered table-sm align-middle" style="width: 500px;">
-                                <tr>
-                                    <th>
-                                        Name
-                                    </th>
-                                    <th>
-                                        IPv4
-                                    </th>
-                                    <th>
-                                        IPv6
-                                    </th>
-                                    <th>
-                                        MAC
-                                    </th>
-                                </tr>
-                                {% for name, data in metric_list_render.metrix_ifaces_collector.items %}
-                                    <tr>
-                                        <td>
-                                            {{ name }}
-                                        </td>
-                                        <td>
-                                            {{ data.ipv4 }}
-                                        </td>
-                                        <td style="column-width: 150px; word-wrap: break-word;">
-                                            {{ data.ipv6 }}
-                                        </td>
-                                        <td>
-                                            {{ data.mac }}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </table>
-                        </div>
-                    </div>
-                    
-                    <div class="col-xl-4 col-lg-6 col-md-10 col-sm-12" >
-                        <div style="font-size: 12px;"  class="graf1">
-                            <table  class="table table-bordered table-sm align-middle">
-                                <tr>
-                                    <th>
-                                        PID
-                                    </th>
-                                    <th>
-                                        Name
-                                    </th>
-                                    <th>
-                                        Username
-                                    </th>
-                                </tr>
-                                {% for name, data in metric_list_render.metrix_proc.items %}
-                                    <tr>
-                                        <td>
-                                            {{ name }}
-                                        </td>
-                                        <td>
-                                            {{ data.name }}
-                                        </td>
-                                        <td>
-                                            {{ data.username }}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4 col-lg-6 col-md-10 col-sm-12" >
-                        <div style="font-size: 12px;" class="graf1">
-                            <table  class="table table-bordered table-sm align-middle">
-                                <tr>
-                                    <th rowspan="2">
-                                        PID
-                                    </th>
-                                    <th colspan="2">
-                                        Local
-                                    </th>
-                                    <th colspan="2">
-                                        Remote
-                                    </th>
-                                    <th rowspan="2">
-                                        Status
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        address
-                                    </th>
-                                    <th>
-                                        port
-                                    </th>
-                                    <th>
-                                        address
-                                    </th>
-                                    <th>
-                                        port
-                                    </th>
-                                </tr>
-                                {% for num, data in metric_list_render.metrix_netconn_established.items %}
-                                <tr>
-                                    {% for status, value in data.items %}
-                                        <td>
-                                            {{ value }}
-                                        </td>
-                                    {% endfor %}
-                                </tr>
-                                {% endfor %}
-                                <tr>
-                                    <td colspan="6">
-                                        <button type="button" class="btn btn-primary" id="all_conner" onclick="netw_hidder()">
-                                            <i id="eyeer" class="bi bi-eye-fill"></i> &nbsp;&nbsp; <span id="netw_hidder_text"> show all statuses</span> 
-                                            </button>
-                                    </td>
-                                    
-                                </tr>
-                                {% for num, data in metric_list_render.metrix_netconn_other.items %}
-                                <tr class="all_conns" style="display: none;">
-                                    {% for status, value in data.items %}
-                                        <td>
-                                            {{ value }}
-                                        </td>
-                                    {% endfor %}
-                                </tr>
-                                {% endfor %}
-                                
-                            </table>
-                            <script>
-                                function netw_hidder(){
-                                    var connects = document.getElementsByClassName('all_conns');
-                                    var buttontxt = document.getElementById('netw_hidder_text');
-                                    var eyes = document.getElementById('eyeer');
-                                    for (var i = 0; i < connects.length; i++) {
-                                        if (connects[i].style.display === 'none') {
-                                            connects[i].style.display = '';
-                                            buttontxt.innerText = 'hide all statuses';
-                                            eyes.classList.remove('bi-eye-fill');
-                                            eyes.classList.add('bi-eye-slash-fill');
-                                        }
-                                        else {
-                                            connects[i].style.display = 'none';
-                                            buttontxt.innerText = 'show all statuses';
-                                            eyes.classList.remove('bi-eye-slash-fill');
-                                            eyes.classList.add('bi-eye-fill');
                                         }
                                     }
-                                }
-                            </script>
-                        </div>
+                                },
+                            });
+                        </script>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-6 col-md-10 col-sm-12" >
+                    <div class="graf">
+                        <canvas id="notmyChart2" width="450" height="350" ></canvas>
+                        <script>
+                            const ctx2 = document.getElementById('notmyChart2');
+                            const notmyChart2 = new Chart(ctx2, {
+                                type: 'line',
+                                data: {
+                                    labels: {{metric_list_render.metrix_date_5|safe}},
+                                    datasets: [{
+                                        label: 'RAM',
+                                        data: {{metric_list_render.metrix_ram_5}},
+                                        fill: true,
+                                        backgroundColor: [
+                                            'rgba(34, 139, 34, 0.2)'
+                                        ],
+                                        borderColor: [
+                                            'rgba(34, 139, 34, 1)'
+                                        ],
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    responsive: false,
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            min: 0,
+                                            max: 100,
+                                            ticks: {
+                                                stepSize: 20
+                                            }
+                                        }
+                                    }
+                                },
+                            });
+                        </script>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-6 col-md-10 col-sm-12" >
+                    <div class="graf">
+                        <canvas id="notmyChart3" width="450" height="350" ></canvas>
+                        <script>
+                            const ctx3 = document.getElementById('notmyChart3');
+                            const notmyChart3 = new Chart(ctx3, {
+                                type: 'line',
+                                data: {
+                                    labels: {{metric_list_render.metrix_date_5|safe}},
+                                    datasets: [{
+                                        label: 'SWAP',
+                                        data: {{metric_list_render.metrix_swap_5}},
+                                        fill: true,
+                                        backgroundColor: [
+                                            'rgba(65, 105, 225, 0.2)'
+                                        ],
+                                        borderColor: [
+                                            'rgba(65, 105, 225, 1)'
+                                        ],
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    responsive: false,
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            min: 0,
+                                            max: 100,
+                                            ticks: {
+                                                stepSize: 20
+                                            }
+                                        }
+                                    }
+                                },
+                            });
+                        </script>
                     </div>
                 </div>
             </div>
-        <br><br><br><br>
-    </body>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-4 col-lg-6 col-md-10 col-sm-12" >
+                    <div class="graf1">
+                        <canvas id="notmyChart4" width="450" height="350" ></canvas>
+                        <script>
+                            const ctx4 = document.getElementById('notmyChart4');
+                            const notmyChart4 = new Chart(ctx4, {
+                                type: 'bar',
+                                data: {
+                                    labels: {{metric_list_render.metrix_rom_names|safe}},
+                                    datasets: [{
+                                        axis: 'y',
+                                        label: 'Disk usage',
+                                        data: {{metric_list_render.metrix_rom_percents}},
+                                        fill: false,
+                                        backgroundColor: [
+                                            'rgba(153, 50, 204, 0.2)'
+                                        ],
+                                        borderColor: [
+                                            'rgb(153, 50, 204, 1)'
+                                        ],
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    responsive: false,
+                                    indexAxis: 'y',
+                                    scales: {
+                                        x: {
+                                            beginAtZero: true,
+                                            min: 0,
+                                            max: 100,
+                                            ticks: {
+                                                stepSize: 20
+                                            }
+                                        }
+                                    }
+                                },
+                            });
+                        </script>
+                    </div>
+                </div>  
+                <div class="col-xl-4 col-lg-6 col-md-10 col-sm-12" >
+                    <div class="graf1 metrix_txt">
+                        <table class="table table-bordered table-sm align-middle metrix_table_users metrix_table_word">
+                            <tr>
+                                <th>
+                                    Username
+                                </th>
+                                <th>
+                                    PID
+                                </th>
+                                <th>
+                                    Process
+                                </th>
+                            </tr>
+                            {% for pid, data in metric_list_render.metrix_users_collector.items %}
+                                <tr>
+                                    <td>
+                                        {{ data.0 }}
+                                    </td>
+                                    <td>
+                                        {{ pid }}
+                                    </td>
+                                    <td>
+                                        {{ data.1 }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>            
+                <div class="col-xl-4 col-lg-6 col-md-10 col-sm-12" >
+                    <div class="graf1 metrix_txt">
+                        <table class="table table-bordered table-sm align-middle metrix_table_network metrix_table_word">
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    IPv4
+                                </th>
+                                <th>
+                                    IPv6
+                                </th>
+                                <th>
+                                    MAC
+                                </th>
+                            </tr>
+                            {% for name, data in metric_list_render.metrix_ifaces_collector.items %}
+                                <tr>
+                                    <td>
+                                        {{ name }}
+                                    </td>
+                                    <td>
+                                        {{ data.ipv4 }}
+                                    </td>
+                                    <td>
+                                        {{ data.ipv6 }}
+                                    </td>
+                                    <td>
+                                        {{ data.mac }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div> 
+                <div class="col-xl-4 col-lg-6 col-md-10 col-sm-12" >
+                    <div class="graf1 metrix_txt">
+                        <table  class="table table-bordered table-sm align-middle">
+                            <tr>
+                                <th>
+                                    PID
+                                </th>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    Username
+                                </th>
+                            </tr>
+                            {% for name, data in metric_list_render.metrix_proc.items %}
+                                <tr>
+                                    <td>
+                                        {{ name }}
+                                    </td>
+                                    <td>
+                                        {{ data.name }}
+                                    </td>
+                                    <td>
+                                        {{ data.username }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-6 col-md-10 col-sm-12" >
+                    <div class="graf1 metrix_txt">
+                        <table  class="table table-bordered table-sm align-middle">
+                            <tr>
+                                <th rowspan="2">
+                                    PID
+                                </th>
+                                <th colspan="2">
+                                    Local
+                                </th>
+                                <th colspan="2">
+                                    Remote
+                                </th>
+                                <th rowspan="2">
+                                    Status
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    address
+                                </th>
+                                <th>
+                                    port
+                                </th>
+                                <th>
+                                    address
+                                </th>
+                                <th>
+                                    port
+                                </th>
+                            </tr>
+                            {% for num, data in metric_list_render.metrix_netconn_established.items %}
+                            <tr>
+                                {% for status, value in data.items %}
+                                    <td>
+                                        {{ value }}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                            <tr>
+                                <td colspan="6">
+                                    <button type="button" class="btn btn-primary" id="all_conner" onclick="netw_hidder()">
+                                        <i id="eyeer" class="bi bi-eye-fill"></i> &nbsp;&nbsp; <span id="netw_hidder_text"> show all statuses</span> 
+                                        </button>
+                                </td>                    
+                            </tr>
+                            {% for num, data in metric_list_render.metrix_netconn_other.items %}
+                            <tr class="all_conns" style="display: none;">
+                                {% for status, value in data.items %}
+                                    <td>
+                                        {{ value }}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}   
+                        </table>
+
+                        <script>
+                            function netw_hidder(){
+                                var connects = document.getElementsByClassName('all_conns');
+                                var buttontxt = document.getElementById('netw_hidder_text');
+                                var eyes = document.getElementById('eyeer');
+                                for (var i = 0; i < connects.length; i++) {
+                                    if (connects[i].style.display === 'none') {
+                                        connects[i].style.display = '';
+                                        buttontxt.innerText = 'hide all statuses';
+                                        eyes.classList.remove('bi-eye-fill');
+                                        eyes.classList.add('bi-eye-slash-fill');
+                                    }
+                                    else {
+                                        connects[i].style.display = 'none';
+                                        buttontxt.innerText = 'show all statuses';
+                                        eyes.classList.remove('bi-eye-slash-fill');
+                                        eyes.classList.add('bi-eye-fill');
+                                    }
+                                }
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var int=window.setInterval(function(){refresh()},5000);
+
+        function refresh(){
+            var refresh_status = document.getElementById('autorefresh_button');
+            if (refresh_status.innerText === 'Refresh ON') {
+                window.location.reload();
+            }
+        }
+
+        function refresher(){
+            var refresh_status = document.getElementById('autorefresh_button');
+            if (refresh_status.innerText === 'Refresh ON') {
+                refresh_status.innerText = 'Refresh OFF';
+                refresh_status.classList.remove('refresh_on');
+                refresh_status.classList.add('refresh_off');
+            }
+            else {
+                refresh_status.innerText = 'Refresh ON';
+                refresh_status.classList.remove('refresh_off');
+                refresh_status.classList.add('refresh_on');
+            }
+        }
+    </script>
 
 {% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Watcher - No data{% endblock %}
+{% block content %}
+{% load static %}
+{% load perm_extras %}
+
+
+    <div class="header container-fluid">
+        <table class="table table-borderless table-sm header_h">
+            <tbody>
+                <tr>
+                    <td class="active_name align-middle">
+                        <a href="{% url 'show_actives' %}" ><i class="bi bi-arrow-left-square-fill"></i></a>
+                    </td>
+                    <td class="align-middle active_data">
+                        No data
+                    </td>
+                    <td class="active_data align-middle logout">
+                        <a href="/accounts/logout/"><button type="button" class="btn btn-outline-dark btn-lg">LOGOUT</button></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container2">
+        <div>No metrics on database
+            <br><br>You need to recieve metrics from this active at least once<br>
+        </div>
+    </div>
+
+{% endblock %}

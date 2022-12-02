@@ -1,10 +1,47 @@
-<html>
-    delete active
-    <br><br>
-    Are you sure?<br>
-    <form action="" method="post">
-        {% csrf_token %}
-        <button>Delete</button>
-    </form>
-    <a href="{% url 'show_actives' %}"><button> Cancel </button></a>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Watcher - Delete{% endblock %}
+{% block content %}
+{% load static %}
+{% load perm_extras %}
+
+
+    <div class="header container-fluid">
+        <table class="table table-borderless table-sm header_h">
+            <tbody>
+                <tr>
+                    <td class="active_name align-middle">
+                        <a href="/" ><i class="bi bi-house-door-fill"></i></a>
+                    </td>
+                    <td class="align-middle active_data">
+                        Delete the active
+                    </td>
+                    <td class="active_data align-middle logout">
+                        <a href="/accounts/logout/"><button type="button" class="btn btn-outline-dark btn-lg">LOGOUT</button></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container2">
+        <div class="card border-danger">
+            <div class="card-body text-danger">
+                <h5>DANGER ZONE</h5>
+                Attention: this action can't be cancelled!
+            </div>
+        </div>
+        </br>
+        Are you sure?</br>
+        </br>
+        <form method="POST" action="{% url 'delete_active' pk=active.pk %}">{% csrf_token %}
+            <table>
+                <td>
+                    <button type="submit" class="btn btn-danger">Delete</button>&nbsp;&nbsp;
+                    <a href="{% url 'show_actives' %}"><button type="button" class="btn btn-secondary">Cancel</button></a>
+                </td>
+            </table>
+        </form>
+    </div>
+
+{% endblock %}

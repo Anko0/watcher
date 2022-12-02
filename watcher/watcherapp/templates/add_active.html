@@ -1,8 +1,48 @@
-<html>
-    add active
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Submit">
-    </form>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Watcher - Add{% endblock %}
+{% block content %}
+{% load static %}
+{% load perm_extras %}
+
+
+    <div class="header container-fluid">
+        <table class="table table-borderless table-sm header_h">
+            <tbody>
+                <tr>
+                    <td class="active_name align-middle">
+                        <a href="/" ><i class="bi bi-house-door-fill"></i></a>
+                    </td>
+                    <td class="align-middle active_data">
+                        Add new active
+                    </td>
+                    <td class="active_data align-middle logout">
+                        <a href="/accounts/logout/"><button type="button" class="btn btn-outline-dark btn-lg">LOGOUT</button></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container2">
+        <strong>How to add a new active? Read the instruction:</strong></br>
+        <ol>
+            <li>Copy files watcher_agent.py and watcher_agent.json to a single directory on the remove host (your new active)</li>
+            <li>Copy the token from the form below and paste its value on ACTIVE_TOKEN variable in watcher_agent.json</li>
+            <li>Fill API_URL variable in watcher_agent.json (format: http(s)://watcher_ip:watcher_port/metrix/)</li>
+            <li>Fill TIME_DELAY variable in watcher_agent.json (means how often to collect metrics)</li>
+            <li>Complete the form below</li>
+            <li>Click Save</li>
+        </ol>
+        </br>
+        <form method="post">{% csrf_token %}
+            <table>
+                {{ form.as_table }}
+            </table>
+            </br>
+            <a href="{% url 'show_actives' %}"><button type="submit" class="btn btn-success">Save</button></a>
+            <a href="{% url 'show_actives' %}"><button type="button" class="btn btn-secondary">Cancel</button></a>
+        </form>
+    </div>
+
+{% endblock %}

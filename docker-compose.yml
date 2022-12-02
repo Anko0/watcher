@@ -5,17 +5,23 @@ services:
     image: postgres
     restart: always
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=******** # change it!
-      - POSTGRES_DB=postgres
+      - POSTGRES_USER=watcher
+      - POSTGRES_PASSWORD=******** # change it to your own
+      - POSTGRES_DB=watcher
     volumes:
       - ../postgres-watcher:/var/lib/postgresql/data
     ports:
       - 5432:5432
   web:
     restart: always
+    environment:
+      - POSTGRES_PASSWORD=******** # change it to your own (the same as above)
+      - DJANGO_EMAIL_HOST=127.0.0.1 # your mail server's setting
+      - DJANGO_EMAIL_PORT=25 # your mail server's settins
+      - DJANGO_EMAIL_HOST_USER=  # your mail server's auth data
+      - DJANGO_EMAIL_HOST_PASSWORD=  # your mail server's auth data
+      - DJANGO_EMAIL_FROM=  # email address to send alerts from
     build: .
-    command: 'python /var/www/watcher/watcher/manage.py runserver 0.0.0.0:8090'
     volumes:
       - .:/var/www/watcher
     ports:

@@ -21,7 +21,7 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'x91#0rx9%ho1z8h6tj#1xzd+k88oj8-gb61144qlt__pfzc=ue' # non prod
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'x91#0rx9%ho1z8h6tj#1xzd+k88oj8-gb61144qlt__pfzc=ue')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bootstrap4',
     'watcherapp',
     'rest_framework',
 ]
@@ -71,6 +70,10 @@ TEMPLATES = [
     },
 ]
 
+TEMPLATE_LOADERS = (
+    'django.template.loaders.app_directories.load_template_source',
+)
+
 WSGI_APPLICATION = 'watcher.wsgi.application'
 
 
@@ -80,9 +83,9 @@ WSGI_APPLICATION = 'watcher.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': '********', # change it!
+        'NAME': 'watcher',
+        'USER': 'watcher',
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
         'HOST': 'db1',
         'PORT': 5432,
     },
@@ -121,9 +124,19 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, '/var/www/watcher/watcher/watcherapp/static/')
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.environ['DJANGO_EMAIL_HOST']
+EMAIL_PORT = int(os.environ['DJANGO_EMAIL_PORT'])
+EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_HOST_PASSWORD', '')
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

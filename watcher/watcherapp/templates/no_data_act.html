@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Watcher - No data{% endblock %}
+{% block content %}
+{% load static %}
+{% load perm_extras %}
+
+
+    <div class="header container-fluid">
+        <table class="table table-borderless table-sm header_h">
+            <tbody>
+                <tr>
+                    <td class="active_name align-middle">
+                        <a href="/" ><i class="bi bi-house-door-fill"></i></a>
+                    </td>
+                    <td class="align-middle active_data">
+                        No data
+                    </td>
+                    <td class="active_data align-middle logout">
+                        <a href="/accounts/logout/"><button type="button" class="btn btn-outline-dark btn-lg">LOGOUT</button></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container2">
+        <div>No actives
+            <br><br>You need to add at least one active <br><br>
+            <a href="{% url 'add_active' %}" class="btn btn-success whiter">Add the first active</a>
+        </div>
+    </div>
+
+{% endblock %}

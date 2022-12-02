@@ -4,7 +4,6 @@ import re
 import requests
 import json
 import asyncio
-
 from datetime import datetime
 
 
@@ -15,11 +14,11 @@ def collector():
         cpu += "%s " % (round(x / cpus * 100, 2))
 
     rammer = psutil.virtual_memory()
-    ram = {'total': rammer[0], 'percent': rammer[2], 'used': rammer[3], 
+    ram = {'total': rammer[0]/1073741824, 'percent': rammer[2], 'used': rammer[3]/1073741824, 
            'free': rammer[4], 'buffers': rammer[7], 'cached': rammer[8]}
 
     swapper = psutil.swap_memory()
-    swap = {'total': swapper[0], 'used': swapper[1], 
+    swap = {'total': swapper[0]/1073741824, 'used': swapper[1]/1073741824, 
             'free': swapper[2], 'percent': swapper[3]}
 
     partitions = str(psutil.disk_partitions())
@@ -27,7 +26,7 @@ def collector():
     repartitions = re.findall("mountpoint='(.+?)',", partitions)
     for part in repartitions: 
         rommer = psutil.disk_usage(part)
-        rom_updater = {part:{'total':rommer[0], 'used': rommer[1], 
+        rom_updater = {part:{'total':rommer[0]/1073741824, 'used': rommer[1]/1073741824, 
                              'free': rommer[2], 'percent': rommer[3]}}
         rom.update(rom_updater)
 
@@ -74,7 +73,7 @@ def collector():
 
     created = str(datetime.now())
 
-    headers = {'Content-type': 'application/json'}
+    headers = {'Content-type': 'application/json', 'Active-Token': active_token}
     metrix = {'metrix_token': active_token, 'metrix_created': created,
               'metrix_cpu': cpu, 'metrix_ram': ram, 'metrix_swap': swap, 
               'metrix_rom': rom, 'metrix_proc': procs, 'metrix_netconn': conn, 
@@ -100,4 +99,3 @@ api_url = config['API_URL']
 time_delay = config['TIME_DELAY']
 
 asyncio.run(main())
-

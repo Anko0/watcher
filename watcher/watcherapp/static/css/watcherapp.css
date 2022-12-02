@@ -3,7 +3,7 @@ div.container {
     flex-wrap: wrap;
 }
 div.header {
-    background-color: burlywood;
+    background-color: lightskyblue;
     height: fit-content;
 }
 .active_name {
@@ -27,17 +27,65 @@ a.not_link {
 text-decoration: none;
 }
 a:link {
-    color: #003b00;
+    color: black;
 }
 a:visited {
-    color: #003b00;
+    color: black;
 }
 a:hover {
-    color: #003b00;
+    color: black;
 }
 a:active {
-    color: #003b00;
+    color: black;
 }
 .tr_color {
     background: rgb(152, 207, 152); 
+}
+div.container1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+div.center {
+    margin: 0;
+    width: 400px;
+}
+div.container2 {
+    padding: 20px;
+}
+li i {
+    cursor: pointer;
+}
+td.logout {
+    text-align: right;
+}
+a.whiter {
+    color: white;
+}
+.header_h {
+    height: 100%;
+}
+.table_w {
+    width: auto;
+}
+.active_txt {
+    font-size: 14px;
+}
+.metrix_txt {
+    font-size: 12px;
+}
+.metrix_table_users {
+    width: 300px;
+}
+.metrix_table_network {
+    width: 500px;
+}
+.metrix_table_word {
+    word-wrap: break-word;
+}
+tr.no_border td {
+    border: 0;
+}
+td.onefour_wid {
+    width: 25%;
 }

@@ -1,0 +1,44 @@
+{% extends "../base.html" %}
+
+{% block title %}Watcher - Login{% endblock %}
+{% block content %}
+{% load static %}
+
+
+    <div class="header container-fluid">
+        <table class="table table-borderless table-sm header_h">
+            <tbody>
+                <tr>
+                    <td class="active_name align-middle">
+                        Watcher
+                    </td>
+                    <td class="align-middle active_data">
+                        Login to monitor your resources
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container1">
+        {% if user.is_authenticated %}
+            <div class="center">
+                You are authenticated yet!
+            </div>
+        {% else %}
+            <div class="center">
+                <form method="post" action="{% url 'login' %}">{% csrf_token %}
+                    <table>
+                        {{ form.as_table }}
+                    </table>
+                    </br>
+                    <button type="submit" class="btn btn-success">Login</button>
+                </form>
+
+                </br>
+                <p>Lost password? Contact your administrator</p>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

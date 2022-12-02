@@ -1,3 +1,6 @@
 watcher/watcher/__pycache__/
 watcher/watcherapp/__pycache__/
 watcher/watcherapp/migrations/__pycache__/
+watcher/watcherapp/templatetags/__pycache__/
+watcher/watcherapp/management/__pycache__/
+watcher/watcherapp/management/commands/__pycache__/

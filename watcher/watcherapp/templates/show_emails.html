@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Watcher - Emails{% endblock %}
+{% block content %}
+{% load static %}
+
+
+    <div class="header container-fluid">
+        <table class="table table-borderless table-sm header_h">
+            <tbody>
+                <tr>
+                    <td class="active_name align-middle">
+                        <a href="/" ><i class="bi bi-house-door-fill"></i></a>
+                    </td>
+                    <td class="align-middle active_data">
+                        Email addresses for alerting
+                    </td>
+                    <td class="active_data align-middle logout">
+                        <a href="/accounts/logout/"><button type="button" class="btn btn-outline-dark btn-lg">LOGOUT</button></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container2">
+        <div>
+        This page is for managing mailing lists </br>
+        Letters will be sent to the specified email addresses when the limit values of metrics received from resources are reached</br></br>
+        Current alerting email addresses are here:</br>
+        <ol>
+            {% for email in emails_list_render %}
+            <li>
+                {{ email.alert_email }} &nbsp;
+                <i class="bi bi-trash-fill mod" data-toggle="modal" data-target="#emailModal" data-url="{% url 'delete_email' pk=email.pk %}"></i>
+            </li>
+            {% endfor %}
+        </ol>
+        <button class="btn btn-success btn-sm mod" data-toggle="modal" data-target="#emailModal" data-url="{% url 'add_email' %}">Add new email address</button></br>
+        </div>
+    </div>
+
+    <div class="modal fade modal-dialog" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModalLabel" aria-hidden="false"></div>
+
+    <script>
+
+        function modfunc(ev) {
+            ev.preventDefault(); 
+            var url = $(ev.currentTarget).data('url');
+            $('#emailModal').load(url, function() { 
+                $('#emailModal').modal('show');
+            });
+            return false;
+        }
+
+        $('.mod').click(modfunc);
+
+    </script>
+
+{% endblock %}

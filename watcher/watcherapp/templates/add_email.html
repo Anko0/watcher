@@ -1,0 +1,21 @@
+<div class="modal-dialog modal-sm">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="emailModalLabel"><strong>Add new email address</strong></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" action="{% url 'add_email' %}">{% csrf_token %} 
+                {{ form.as_p }}
+                <table>
+                    <td>
+                        <button type="submit" class="btn btn-success btn-sm">Save</button>&nbsp;&nbsp;
+                        <button data-dismiss="modal" type="reset" class="btn btn-secondary btn-sm">Cancel</button>
+                    </td>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>

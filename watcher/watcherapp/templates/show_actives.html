@@ -1,155 +1,196 @@
 {% extends 'base.html' %}
 
 {% block title %}Watcher - Actives{% endblock %}
+{% load static %}
 {% block content %}
 
-    <body>
-        <div class="header container-fluid">
-            <table class="table table-borderless table-sm" style="height: 100%;">
-                <tbody>
-                    <tr>
-                        <td class="active_name align-middle">
-                            Connected actives
-                        </td>
-                        <td class="align-middle active_data">
-                            Last connect: {{ active_list_menu.last_active }} at {{ active_list_menu.last_metrix_time }}
-                        </td>
-                        <td class="active_data align-middle">
-                            <a href=""><button type="button" class="btn btn-light">Some button</button></a>
-                        </td>
-                        <td class="active_data align-middle">
-                            <a href="{% url 'add_active' %}"><button type="button" class="btn btn-light">ADD ACTIVE</button></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <br><br>
 
+    <div class="header container-fluid">
+        <table class="table table-borderless table-sm header_h">
+            <tbody>
+                <tr>
+                    <td class="active_name align-middle">
+                        <a href="/" ><i class="bi bi-house-door-fill"></i></a>
+                    </td>
+                    <td class="active_name align-middle">
+                        Connected actives
+                    </td>
+                    <td class="align-middle active_data">
+                        Last connect: {{ active_list_menu.last_active }} at {{ active_list_menu.last_metrix_time }}
+                    </td>
+                    <td class="active_data align-middle">
+                        <button type="button" class="btn btn-outline-dark btn-lg" id="autorefresh_button" onclick="refresher()">Refresh ON</button>
+                    </td>
+                    <td class="active_data align-middle">
+                        <a href="{% url 'add_active' %}"><button type="button" class="btn btn-outline-dark btn-lg">ADD ACTIVE</button></a>
+                    </td>
+                    <td class="active_data align-middle logout">
+                        <a href="/accounts/logout/"><button type="button" class="btn btn-outline-dark btn-lg">LOGOUT</button></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container2">
         <div class="container-fluid">
             <div class="row">
-            {% for iter, active in active_list_render.items %}
-                <div class="col-xl-4 col-lg-6 col-md-8 col-sm-12">
-                    <div class="active ">
-                        <table  class="table table-bordered table-sm align-middle"  style="font-size: 12px;">
-                            <tr class="tr_color" style="font-size: 14px;">
-                                <td colspan="2" >
-                                    <a href="{% url 'show_active' pk=active.pk %}" ><b>{{ active.active_name }}</b></a>
-                                </td>
-                                <td>
-                                    <a href="{% url 'edit_active' pk=active.pk %}"><i class="bi bi-pencil-fill"></i></a>
-                                </td>
-                                <td>
-                                    <a href="{% url 'delete_active' pk=active.pk %}"><i class="bi bi-trash-fill"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <b>IP</b>
-                                </td>
-                                <td colspan="3">
-                                    {{ active.active_ip }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <b>HOSTNAME</b>
-                                </td>
-                                <td colspan="3">
-                                    {{ active.active_hostname }}
-                                </td>
-                            </tr>
-                            <tr>
-                            <td>
-                                <b>CONNECT</b>
-                            </td>
-                            <td colspan="3">
-                                {{ active.active_metrix_created }}
-                            </td>
-                            </tr>
-                            <tr>
-                                <td colspan="4">
-                                    <b>METRICS</b>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <b>CPU AVG</b>
-                                </td>
-                                <td>
-                                    {{ active.active_cpu1 }}
-                                </td>
-                                <td>
-                                    {{ active.active_cpu2 }}
-                                </td>
-                                <td>
-                                    {{ active.active_cpu3 }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <b>RAM</b>
-                                </td>
-                                <td>
-                                    {{ active.active_ram_total }}
-                                </td>
-                                <td>
-                                    {{ active.active_ram_used }}
-                                </td>
-                                <td>
-                                    {{ active.active_ram_percent }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <b>SWAP</b>
-                                </td>
-                                <td>
-                                    {{ active.active_swap_total }}
-                                </td>
-                                <td>
-                                    {{ active.active_swap_used }}
-                                </td>
-                                <td>
-                                    {{ active.active_swap_percent }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="4">
-                                    <b>DISK USAGE</b>
-                                </td>
-                            </tr>
-                            <tr>
-                                {% if active.active_rom == "NO DATA" %}
-                                    <td colspan="4">
-                                        NO DATA
+                {% for iter, active in active_list_render.items %}
+                    <div class="col-xl-4 col-lg-6 col-md-8 col-sm-12">
+                        <div class="active">
+                            <table class="table table-bordered table-sm align-middle metrix_txt">
+                                <tr class="tr_color active_txt no_border">
+                                    <td colspan="3">
+                                        <a href="{% url 'show_active' pk=active.pk %}" ><strong>{{ active.active_name }}</strong></a>
                                     </td>
-                                {% else %}
-                                    {% for disk, data in active.active_rom.items %}
-                                        <tr>
+                                    <td class="logout">
+                                        <a href="{% url 'edit_active' pk=active.pk %}"><i class="bi bi-pencil-fill"></i></a>&nbsp;&nbsp;
+                                        <a href="{% url 'delete_active' pk=active.pk %}"><i class="bi bi-trash-fill"></i></a>&nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>IP</strong>
+                                    </td>
+                                    <td colspan="3">
+                                        {{ active.active_ip }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>HOSTNAME</strong>
+                                    </td>
+                                    <td colspan="3">
+                                        {{ active.active_hostname }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>CONNECT</strong>
+                                    </td>
+                                    <td colspan="3">
+                                        {{ active.active_metrix_created }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <strong>METRICS</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="onefour_wid">
+                                        <strong>CPU AVG</strong>
+                                    </td>
+                                    <td class="onefour_wid">
+                                        {{ active.active_cpu1 }}
+                                    </td>
+                                    <td class="onefour_wid">
+                                        {{ active.active_cpu2 }}
+                                    </td>
+                                    <td class="onefour_wid">
+                                        {{ active.active_cpu3 }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>RAM</strong>
+                                    </td>
+                                    {% if active.active_ram_total == "NO DATA" %}
+                                        <td colspan="3">
+                                            NO DATA
+                                        </td>
+                                    {% else %}
                                         <td>
-                                            {{ disk }}
+                                            {{ active.active_ram_total|floatformat:3 }}&nbsp;GB
                                         </td>
                                         <td>
-                                            {{ data.total }}
+                                            {{ active.active_ram_used|floatformat:3 }}&nbsp;GB
                                         </td>
                                         <td>
-                                            {{ data.used }}
+                                            {{ active.active_ram_percent }}&nbsp;%
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>SWAP</strong>
+                                    </td>
+                                    {% if active.active_swap_total == "NO DATA" %}
+                                        <td colspan="3">
+                                            NO DATA
+                                        </td>
+                                    {% else %}
+                                        <td>
+                                            {{ active.active_swap_total|floatformat:3 }}&nbsp;GB
                                         </td>
                                         <td>
-                                            {{ data.percent }}
+                                            {{ active.active_swap_used|floatformat:3 }}&nbsp;GB
                                         </td>
-                                        </tr>
-                                    {% endfor %}
-                                {% endif %}
-                            </tr>
-                        </table>
+                                        <td>
+                                            {{ active.active_swap_percent }}&nbsp;%
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <strong>DISK USAGE</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    {% if active.active_rom == "NO DATA" %}
+                                        <td colspan="4">
+                                            NO DATA
+                                        </td>
+                                    {% else %}
+                                        {% for disk, data in active.active_rom.items %}
+                                            <tr>
+                                                <td>
+                                                    {{ disk }}
+                                                </td>
+                                                <td>
+                                                    {{ data.total|floatformat:3 }}&nbsp;GB
+                                                </td>
+                                                <td>
+                                                    {{ data.used|floatformat:3 }}&nbsp;GB
+                                                </td>
+                                                <td>
+                                                    {{ data.percent }}&nbsp;%
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% endif %}
+                                </tr>
+                            </table>
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
             </div>
         </div>
-        <br><br><br>
-    </body>
+    </div>
+        
+    <script>
+        var int=window.setInterval(function(){refresh()},5000);
+
+        function refresh(){
+            var refresh_status = document.getElementById('autorefresh_button');
+            if (refresh_status.innerText === 'Refresh ON') {
+                window.location.reload();
+            }
+        }
+
+        function refresher(){
+            var refresh_status = document.getElementById('autorefresh_button');
+            if (refresh_status.innerText === 'Refresh ON') {
+                refresh_status.innerText = 'Refresh OFF';
+                refresh_status.classList.remove('refresh_on');
+                refresh_status.classList.add('refresh_off');
+            }
+            else {
+                refresh_status.innerText = 'Refresh ON';
+                refresh_status.classList.remove('refresh_off');
+                refresh_status.classList.add('refresh_on');
+            }
+        }
+    </script>
 
 {% endblock %}
