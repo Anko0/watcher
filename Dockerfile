@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM python:3.10-slim
 RUN apt update
 ENV PYTHONUNBUFFERED 1
 RUN mkdir -p /var/www/watcher
