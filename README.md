@@ -27,15 +27,17 @@ How to manage users:
 4. Add new user to the one group: "managers" (only browse actives and metrics) or "administrators" (additionaly can add/manage actives and emails)
 5. If you need a new one superuser (as "admin"), add "staff status" and "superuser status"
 
-## Installation
+## Server installation
 1. Clone the project
 2. Specify your own password for postgresql on docker-compose.yml
 3. Specify your own mail settings on docker-compose.yml
 4. Run docker-compose up and wait when installation will be done
 5. Log in on http://watcher_ip:8090/admin (django admin) with default credetionals admin:watcheradmin and change password for "admin"
-6. Add an active on the server's interface and follow the instruction
-7. Execute watcher_agent.py as root
-8. On a few seconds data will be displayed on the web interface
+
+## Agent installation
+
+1. Add an active on the server's interface and follow the instruction
+2. On a few seconds data will be displayed on the web interface
 
 ## Additional properties
 1. Do not delete CONFIG file after installation, only if you want to produce full reinstallation

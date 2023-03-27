@@ -27,12 +27,18 @@
     <div class="container2">
         <strong>How to add a new active? Read the instruction:</strong></br>
         <ol>
-            <li>Copy files watcher_agent.py and watcher_agent.json to a single directory on the remove host (your new active)</li>
-            <li>Copy the token from the form below and paste its value on ACTIVE_TOKEN variable in watcher_agent.json</li>
-            <li>Fill API_URL variable in watcher_agent.json (format: http(s)://watcher_ip:watcher_port/metrix/)</li>
-            <li>Fill TIME_DELAY variable in watcher_agent.json (means how often to collect metrics)</li>
+            <li>Copy project directory 'agent' to the remove host (your new active)</li>
+            <li>Run installer.sh as root</li>
+            <li>Target watcher_agent.json is /opt/watcher-agent/watcher_agent.json, edit it:</li>
+            <ol>
+                <li>Copy 'Token for API' from the form below and paste its value on ACTIVE_TOKEN variable in watcher_agent.json</li>
+                <li>Fill API_URL variable in watcher_agent.json (format: http(s)://watcher_ip:watcher_port/metrix/)</li>
+                <li>Fill TIME_DELAY variable in watcher_agent.json (means how often to collect metrics)</li>
+                <li>Save the file</li>
+            </ol>
             <li>Complete the form below</li>
             <li>Click Save</li>
+            <li>Run the watcher agent systemd service on the host</li>
         </ol>
         </br>
         <form method="post">{% csrf_token %}
