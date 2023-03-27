@@ -15,7 +15,7 @@
                     <td class="active_name align-middle">
                         Connected actives
                     </td>
-                    <td class="align-middle active_data">
+                    <td class="align-middle active_data updater1">
                         Last connect: {{ active_list_menu.last_active }} at {{ active_list_menu.last_metrix_time }}
                     </td>
                     <td class="active_data align-middle">
@@ -34,7 +34,7 @@
 
     <div class="container2">
         <div class="container-fluid">
-            <div class="row">
+            <div class="row updater2">
                 {% for iter, active in active_list_render.items %}
                     <div class="col-xl-4 col-lg-6 col-md-8 col-sm-12">
                         <div class="active">
@@ -167,30 +167,41 @@
             </div>
         </div>
     </div>
-        
+
     <script>
-        var int=window.setInterval(function(){refresh()},5000);
-
-        function refresh(){
-            var refresh_status = document.getElementById('autorefresh_button');
-            if (refresh_status.innerText === 'Refresh ON') {
-                window.location.reload();
-            }
-        }
-
         function refresher(){
             var refresh_status = document.getElementById('autorefresh_button');
             if (refresh_status.innerText === 'Refresh ON') {
                 refresh_status.innerText = 'Refresh OFF';
-                refresh_status.classList.remove('refresh_on');
-                refresh_status.classList.add('refresh_off');
             }
             else {
                 refresh_status.innerText = 'Refresh ON';
-                refresh_status.classList.remove('refresh_off');
-                refresh_status.classList.add('refresh_on');
             }
         }
+
+        function reload_page(){
+            var url = window.location.pathname;
+            var xhr = $.get(url);
+            xhr.done(function(data, status) {
+                let $q = $(data);
+                $('.updater1').replaceWith($q.find('.updater1'));
+                $('.updater2').replaceWith($q.find('.updater2'));
+            });
+            xhr.fail(function(){
+                $('.updater2').replaceWith('Internal error. Please, try again later');
+            });
+            xhr.always(function(){
+                
+            });
+            return false;
+        }
+
+        setInterval(function(){
+            var refresh_status = document.getElementById('autorefresh_button');
+            if(refresh_status.innerText === 'Refresh ON') {
+                reload_page()
+                }
+            }, 5000);
     </script>
 
 {% endblock %}
