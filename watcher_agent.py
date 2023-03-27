@@ -81,11 +81,15 @@ def collector():
               'metrix_users': users}
     json_data = json.dumps(metrix)
     response = requests.post(api_url, data=json_data, headers=headers)
-    print(response.status_code, response.reason)
+    log_response = str(datetime.now()) + ' ' + str(response.status_code) + ' ' + response.reason + '\n'
+    log_file.write(log_response)
+    log_file.flush()
 
 
 async def main():
-    print("Started at", datetime.now())
+    log_start = '\n' + str(datetime.now()) + ' Monitoring started\n'
+    log_file.write(log_start)
+    log_file.flush()
     while(1):
         await asyncio.gather(
             asyncio.to_thread(collector),
@@ -97,5 +101,6 @@ with open('watcher_agent.json', 'r') as f:
 active_token = config['ACTIVE_TOKEN']
 api_url = config['API_URL']
 time_delay = config['TIME_DELAY']
+log_file = open('out_log.log', 'a')
 
 asyncio.run(main())
