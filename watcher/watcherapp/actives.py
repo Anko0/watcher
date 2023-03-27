@@ -45,7 +45,10 @@ class ActiveMetrix():
         metrix_users = metric_list.metrix_users
         metrix_users_collector = {}
         for pid,name in metrix_users.items():
-            pidname = metrix_proc[pid]['name']
+            try:
+                pidname = metrix_proc[pid]['name']
+            except:
+                pidname = '?'
             metrix_users_collector.update({pid:[name,pidname]})
 
         metrix_cpu_5 = []
